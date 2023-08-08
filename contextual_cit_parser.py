@@ -1,15 +1,13 @@
 from bs4 import BeautifulSoup
-from grobid_client.grobid_client import GrobidClient
+from grobid_client_python.grobid_client.grobid_client import GrobidClient
 
 import json
-import nltk
-nltk.download('punkt')  # Download the required data if not already downloaded
-from nltk.tokenize import sent_tokenize
+import spacy
 import os
 
 def extract_paragraphs_with_grobid(pdf_file_path):
     client = GrobidClient(config_path="./grobid_client_python/config.json")
-    test = client.process("processFulltextDocument", pdf_file_path, output="grobid_test/", consolidate_citations=True, tei_coordinates=True, force=True)
+    test = client.process("processFulltextDocument", pdf_file_path, output="acl_papers_tei/", consolidate_citations=True, tei_coordinates=True, force=True)
     print("successfully parse the pdf")
 
 class Publication:
@@ -66,15 +64,14 @@ def get_citation_text(xml_soup):
             paragraph_text += f'{p.text} '
     
     #@Todo : replace this nltk with spaCy to check the sentence parsing performance
-    #nlp = spacy.load("en_core_web_sm")
-    # Process the text using nltk
-    doc = sent_tokenize(paragraph_text)
+    nlp = spacy.load("en_core_web_sm")
+    doc = nlp(paragraph_text)
 
     # 1. one sentence before and after
     citation_text = []
     citation = ""
-    for sent in doc:
-        text = sent.strip()
+    for sent in doc.sents:
+        text = " ".join(sent.text.split("\n"))
         if citation != "":
             citation_text.append(citation + " " + text)
             citation = ""
