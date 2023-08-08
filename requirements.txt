@@ -1,3 +1,4 @@
 beautifulsoup4==4.12.2
-grobid_client==0.8.3
-nltk==3.8.1
+requests==2.26.0
+setuptools==68.0.0
+spacy==3.6.1
