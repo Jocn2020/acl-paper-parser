@@ -6,7 +6,6 @@ import nltk
 nltk.download('punkt')  # Download the required data if not already downloaded
 from nltk.tokenize import sent_tokenize
 import os
-from pdb import set_trace as bp
 
 def extract_paragraphs_with_grobid(pdf_file_path):
     client = GrobidClient(config_path="./grobid_client_python/config.json")
